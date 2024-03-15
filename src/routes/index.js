@@ -2,11 +2,11 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/', (req, res) => {
-    res.render('panel');//Render Main Panel
+    res.status(200).json({response: "root"})
 });
 
-router.get('/signin', (req, res) => {
-    res.render('auth/signin');
+router.get('/auth', (req, res) => {
+    res.status(200).json({response: "Auth EP"})
 });
 
 module.exports = router;
