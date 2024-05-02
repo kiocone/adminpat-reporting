@@ -1,30 +1,30 @@
-require("dotenv").config()
-const morgan = require('morgan');
-const express = require('express');
-const fileUpload = require("express-fileupload");
-const fs = require('fs')
+import express, { urlencoded, json } from 'express';
+import morgan from 'morgan';
+import fileUpload from "express-fileupload";
+import { mkdir } from 'fs';
+import 'dotenv/config'
+import routes from './routes/index.js'
+
 const port = process.env.port;
 
 const app = express();
-
 app.use(morgan('dev'));
-app.use(express.urlencoded({extended: false}));
-app.use(express.json());
+app.use(urlencoded({extended: false}));
+app.use(json());
 app.use(fileUpload({
-  limits: { fileSize: 10 * 1024 * 1024 },
+  limits: { fileSize: 2 * 1024 * 1024 }, // 2MB file size.
 }));
 
-fs.mkdir(process.cwd() + '/reports', (err) => {
+mkdir(process.cwd() + '/reports', (err) => {
   if (err?.code == 'EEXIST') {
-    console.log('reports folder already exist, PASS!')
+    console.log('reports folder already exist, PASS!');
   } else {
-    console.log('Created directory for reports on /reports')
+    console.log('Created directory for reports on /reports');
   }
-})
+});
 
-app.use(require('./routes'));
-
+app.use(routes);
 
 app.listen(port, () => {
-  console.log(`Admipat report serving app has been initialized on port: ${port}`)
+  console.log(`PID: ${process.pid} - Admipat report serving app has been initialized on port: ${port}`);
 })
