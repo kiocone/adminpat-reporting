@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import {JwtEncode} from '../services/auth.service.js';
 import {login, updateUserToken} from '../services/user.service.js';
+import fileUpload from 'express-fileupload';
 
 const router = Router();
 
@@ -15,6 +16,7 @@ router.post('/auth', async (req, res) => {
   }
   const {user, password} = req.body;
   const validUser = await login(user, password);
+  console.log(validUser)
   if (!validUser) {
     res.status(403).json({message: "unauthorized"});
     return;
@@ -30,16 +32,14 @@ router.post('/auth', async (req, res) => {
 
 router.post('/upload', (req, res) => {
   
-  let incomingFile;
-  let uploadPath;
-
   if (!req.files || Object.keys(req.files).length === 0) {
     return res.status(400).send('No files were uploaded.');
-  }
+  } 
+  
+  const incomingFile = req.files?.exampleFile as fileUpload.UploadedFile;
 
   // The name of the input field (i.e. "incomingFile") is used to retrieve the uploaded file
-  incomingFile = req.files.exampleFile;
-  uploadPath = process.cwd() + '/reports/' + incomingFile.name;
+  const uploadPath = process.cwd() + '/reports/' + incomingFile.name;
 
   // Use the mv() method to place the file somewhere on your server
   incomingFile.mv(uploadPath, (err) => {
