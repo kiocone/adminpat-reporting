@@ -12,6 +12,7 @@ export async function getConnection() {
     password,
     host,
     database,
-    waitForConnections: true
+    waitForConnections: true,
+    rowsAsArray: true,
   });
 }

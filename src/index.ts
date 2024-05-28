@@ -5,7 +5,7 @@ import { mkdir } from 'fs';
 import 'dotenv/config'
 import routes from './routes/index.js'
 
-const port = process.env.port;
+const port = process.env.PORT;
 
 const app = express();
 app.use(morgan('dev'));
